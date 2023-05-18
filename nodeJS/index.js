@@ -1,12 +1,15 @@
-const http = require("http");
-const fs = require("fs")
-require("dotenv").config();
+import http from "http";
+import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = process.env.PORT || 3333;
-const folder = process.argv[2];
+const folder = process.argv[2]; 
 
 const server = http.createServer((req,res) => {
    fs.readdir(folder,(err,files) => {
+      console.log("folder -> ",folder)
+
       if(err){
          console.log(err);
       }
