@@ -3,25 +3,30 @@ import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
+import { createLink } from './utils.js';
+
 const PORT = process.env.PORT || 3333;
 const folder = process.argv[2]; 
 
 const server = http.createServer((req,res) => {
-   fs.readdir(folder,(err,files) => {
-      console.log("folder -> ",folder)
-
-      if(err){
-         console.log(err);
-      }
-      else{
-         res.writeHead(200, { "Content-Type": "text/plain" });
-         // res.write("Hello word Server");
-         files.forEach(f => res.write(`${f}<br>`));
-
-         res.end();
-      }
-   })
-
+   if(req.url === "/"){
+      fs.readdir(folder,(err,files) => {
+         // console.log("%s %O folder -> ", JSON.stringify(folder,null,2))
+         console.log("...")
+         if(err){
+            console.log(err);
+         }
+         else{
+            res.writeHead(200, { "Content-Type": "text/html" });
+            files.forEach(f => {
+               const link = createLink(f);
+               res.write(link);
+               // res.write(createLink(`${f}\n`))
+            } );
+            res.end();
+         }
+      })
+   }
 })
 
 server.listen(PORT,() => {
